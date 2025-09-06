@@ -26,6 +26,61 @@ etat = "retour_peche"
 maps = 1
 first_tour = True
 
+def capture_region_bmp(box, filename="capture.bmp"):
+    """
+    Capture une région et sauvegarde en BMP (format brut).
+    """
+    x, y, w, h = box
+    w, h = w-x, h-y
+    raw = root.get_image(x, y, w, h, X.ZPixmap, 0xffffffff)
+
+    # Pixels bruts BGRX
+    data = raw.data
+
+    # Chaque ligne doit être alignée sur 4 octets
+    row_padded = (w * 3 + 3) & ~3
+    filesize = 54 + row_padded * h
+
+    # Header BMP (14 octets)
+    bmp_header = struct.pack(
+        '<2sIHHI',
+        b'BM', filesize, 0, 0, 54
+    )
+    # DIB header (40 octets) -> hauteur signée (int)
+    dib_header = struct.pack(
+        '<IiiHHIIiiII',
+        40, w, -h, 1, 24, 0, row_padded * h, 0, 0, 0, 0
+    )
+
+    # Convertir BGRX -> BGR (supprimer alpha)
+    pixels = bytearray()
+    for row in range(h):
+        offset = row * w * 4
+        line = bytearray()
+        for col in range(w):
+            b, g, r, _ = data[offset+col*4:offset+col*4+4]
+            line.extend([b, g, r])
+        # padding
+        while len(line) < row_padded:
+            line.append(0)
+        pixels.extend(line)
+
+    with open(filename, "wb") as f:
+        f.write(bmp_header)
+        f.write(dib_header)
+        f.write(pixels)
+
+    return filename
+
+def send_photo_telegram(filename, caption=""):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
+    with open(filename, "rb") as f:
+        files = {"photo": f}
+        data = {"chat_id": CHAT_ID, "caption": caption}
+        r = requests.post(url, files=files, data=data)
+    return r.json()
+
+
 def ctrl_double_click_until_color(x, y, check_x, check_y, target_color, delay=0.5):
     """
     Maintient Ctrl et double clique à (x,y) jusqu'à ce que le pixel (check_x,check_y)
@@ -650,6 +705,12 @@ def recherche_pnj():
     click(137, 303)
     time.sleep(2)
     click(609, 178)
+    box = (543, 132, 738, 483)  # x, y, w, h
+    filename = capture_region_bmp(box)
+    print("✅ Capture BMP enregistrée :", filename)
+    resp = send_photo_telegram(filename, "📸 Capture brute avec Xlib")
+    print("📨 Réponse Telegram :", resp)
+
     time.sleep(2)
 
     ctrl_double_click_until_color(
