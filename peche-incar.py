@@ -344,11 +344,8 @@ def do_collect():
     # random.shuffle(positions)  # mélange aléatoire
 
     #verif surpoid
-    click(552, 510)
-    time.sleep(0.8)
-    pixel_color = get_pixel(495, 286)
-    click(721, 89)
-    if pixel_color != (213, 207, 170):
+    pixel_color = get_pixel(391, 519)
+    if pixel_color == (255, 102, 0):
         etat="retour_banque"
         return
 
