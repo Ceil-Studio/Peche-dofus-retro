@@ -5,6 +5,7 @@ import time
 import random
 import requests
 import math
+import struct
 
 TOKEN = "7343462874:AAFxCdI5-8YKEdW11la4OIWnBt45ogB02hI"
 CHAT_ID = "2118541386"
@@ -24,6 +25,7 @@ root = dsp.screen().root
 etat = "retour_peche"
 maps = 1
 first_tour = True
+
 def ctrl_double_click_until_color(x, y, check_x, check_y, target_color, delay=0.5):
     """
     Maintient Ctrl et double clique à (x,y) jusqu'à ce que le pixel (check_x,check_y)
