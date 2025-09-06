@@ -21,7 +21,7 @@ dsp = display.Display()
 root = dsp.screen().root
 
 # Etat initial
-etat = "collect"
+etat = "retour_peche"
 maps = 1
 first_tour = True
 def ctrl_double_click_until_color(x, y, check_x, check_y, target_color, delay=0.5):
