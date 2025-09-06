@@ -6,6 +6,8 @@ import random
 import requests
 import math
 
+#test
+
 TOKEN = "7343462874:AAFxCdI5-8YKEdW11la4OIWnBt45ogB02hI"
 CHAT_ID = "2118541386"
 URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
