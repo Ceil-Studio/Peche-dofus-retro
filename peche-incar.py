@@ -80,6 +80,35 @@ def send_photo_telegram(filename, caption=""):
         r = requests.post(url, files=files, data=data)
     return r.json()
 
+def search_color(x, y, target_color):
+    """
+    Scanne une boîte rectangulaire et clique sur le premier pixel trouvé
+    avec la couleur cible.
+
+    box = (x1, y1, width, height)
+    target_color = (R, G, B)
+    """
+    
+    w = 20
+    h = w
+
+    x1 = int(x-(w/2))
+    y1 = int(y-(h/2))
+
+    raw = root.get_image(x1, y1, w, h, X.ZPixmap, 0xffffffff)
+
+    # Les données brutes sont sous forme BGRX pour chaque pixel
+    data = raw.data
+    stride = w * 4  # chaque pixel = 4 octets
+
+    for row in range(h):
+        for col in range(w):
+            i = row * stride + col * 4
+            b, g, r, _ = data[i:i+4]
+            if (r, g, b) != target_color:
+                return False  # trouvé une couleur différente
+    return True
+
 
 def ctrl_double_click_until_color(x, y, check_x, check_y, target_color, delay=0.5):
     """
@@ -97,10 +126,11 @@ def ctrl_double_click_until_color(x, y, check_x, check_y, target_color, delay=0.
 
         time.sleep(delay)  # petit délai pour que l’écran s’actualise
 
-        pixel = get_pixel(check_x, check_y)
+        pixel = search_color(x, y, target_color)
         print(f"🎨 Vérif pixel ({check_x},{check_y}) = {pixel}, attendu {target_color}")
+  
 
-        if pixel == target_color:
+        if pixel:
             print("✅ Couleur correcte détectée, on arrête la boucle.")
             break
         else:
@@ -714,8 +744,8 @@ def recherche_pnj():
     time.sleep(2)
 
     ctrl_double_click_until_color(
-        571, 234,
-        check_x=565, check_y=233,
+        570, 234,
+        check_x=570, check_y=234,
         target_color=(190, 185, 152),
         delay=0.5
     )
