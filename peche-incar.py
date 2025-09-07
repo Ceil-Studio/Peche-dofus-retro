@@ -735,14 +735,16 @@ def recherche_pnj():
     click(137, 303)
     time.sleep(2)
     click(609, 178)
+
+
+    time.sleep(2)
+
     box = (543, 132, 738, 483)  # x, y, w, h
     filename = capture_region_bmp(box)
     print("✅ Capture BMP enregistrée :", filename)
     resp = send_photo_telegram(filename, "📸 Capture brute avec Xlib")
     print("📨 Réponse Telegram :", resp)
-
-    time.sleep(2)
-
+    
     ctrl_double_click_until_color(
         570, 234,
         check_x=570, check_y=234,
