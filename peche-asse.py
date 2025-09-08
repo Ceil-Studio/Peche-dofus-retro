@@ -335,68 +335,90 @@ def click_and_update(x, y):
     return True
 
 mapsposition = [
-    (615, 478),
-    (31, 422),
-    (137, 70),
-    (722, 124),
-
+    (722, 312),
+    (297, 478),
+    (140, 479),
+    (297, 477),
+    (510, 477),
+    (26, 178),
+    (561, 68),
+    (297, 72),
+    (350, 71),
+    (612, 76),
 ]
 resources_positions = {
     1: [
-        (30, 230),
-        (85, 236),
-        (216, 249),
-        (273, 252),
-        (349, 286),
-        (350, 317),
-        (375, 358),
-        (402, 398),
-        (432, 411),
-        (429, 457),
+        (614, 75),
+        (639, 112),
+        (693, 90),
+        (720, 154),
     ],
     2: [
-        (428, 82),
-        (429, 111),
-        (482, 166),
-        (509, 177),
-        (511, 205),
-        (483, 245),
-        (429, 269),
-        (403, 284),
-        (373, 325),
-        (349, 338),
-        (269, 352),
-        (217, 379),
-        (167, 380),
-        (137, 365),
-        (81, 339),
+        (85, 368),
+        (111, 383),
+        (165, 381),
+        (192, 366),
+        (136, 424),
+        (324, 436),
+        (324, 407),
+        (379, 386),
+        (453, 424),
+        (454, 450),
+        (484, 406),
+        (510, 454),
     ],
     3: [
-        # # ➕ ajoute positions pour map 3
-        (668, 341),
-        (530, 387),
-        (372, 330),
-        (295, 262),
-        (241, 234),
-        (270, 168),
-        (295, 155),
-        (324, 84),
+        (507, 99),
+        (480, 171),
+        (456, 207),
+        (376, 164),
+        (322, 166),
+        (324, 220),
+        (270, 219),
+        (241, 233),
+        (296, 287),
+        (352, 316),
+        (375, 357),
+        (322, 354),
+        (402, 428),
     ],
     4: [
+        (453, 126),
+        (507, 126),
+        (560, 150),
+        (667, 290),
+        (616, 450),
+    ],
+    5: [
+        (478, 143),
+        (561, 153),
+        (374, 276),
+        (429, 276),
+        (507, 316),
+        (666, 372),
         # ➕ ajoute positions pour map 4
         # (349, 477),
-        (350, 450),
-        (324, 406),
-        (270, 381),
-        (270, 352),
-        (270, 326),
-        (296, 195),
-        (322, 246),
-        (484, 194),
-        (612, 180),
-        (643, 196),
-        (675, 212),
-    ]
+    ],
+    6: [
+        # ➕ ajoute positions pour map 4
+        # (349, 477),
+    ],
+    7: [
+        # ➕ ajoute positions pour map 4
+        # (349, 477),
+    ],
+    8: [
+        # ➕ ajoute positions pour map 4
+        # (349, 477),
+    ],
+    9: [
+        # ➕ ajoute positions pour map 4
+        # (349, 477),
+    ],
+    10: [
+        # ➕ ajoute positions pour map 4
+        # (349, 477),
+    ],
 }
 
 
@@ -412,7 +434,7 @@ def change_map():
 
     maps = maps+1
 
-    if maps>4:
+    if maps>10:
         maps = 1
 
     time.sleep(6)
@@ -619,7 +641,7 @@ def en_combat():
         time.sleep(1.5)
 
         #verif fin
-        box = (570, 380, 10, 30)
+        box = (570, 380, 10, 90)
         target_color = (255, 97, 0)
         found = search_and_click(box, target_color)
         if found:
@@ -639,7 +661,7 @@ def en_combat():
 
     time.sleep(0.8)
     #verif fin
-    box = (570, 380, 10, 30)
+    box = (570, 380, 10, 90)
     target_color = (255, 97, 0)
     found = search_and_click(box, target_color)
     if found:
@@ -684,7 +706,7 @@ def retour_banque():
     global etat
     global maps
 
-    nb_clicks = (5 - maps) % 4
+    nb_clicks = (11 - maps) % 10
 
     if nb_clicks>0:
         for i in range(nb_clicks):
@@ -694,27 +716,39 @@ def retour_banque():
     print("Retour à la banque...")
     send_telegram("🏦 Le bot retourne à la banque.")
     time.sleep(2)
-    click(723, 259)
+    click(31, 340)
     time.sleep(6)
-    click(722, 341)
+    click(33, 315)
     time.sleep(6)
-    click(506, 191)
-    click(535, 203)
-    click(161, 260)
-    time.sleep(10)
-    click(296, 475)
+    click(31, 369)
     time.sleep(6)
-    click(407, 475)
+    click(32, 262)
     time.sleep(6)
-    click(349, 477)
+    click(28, 422)
     time.sleep(6)
-    click(401, 473)
+    click(32, 206)
     time.sleep(6)
-    click(29, 288)
+    click(31, 369)
     time.sleep(6)
-    click(30, 292)
+    click(31, 449)
     time.sleep(6)
-    click(630, 180)
+    click(31, 422)
+    time.sleep(6)
+    click(30, 316)
+    time.sleep(6)
+    click(351, 70)
+    time.sleep(6)
+    click(216, 83)
+    time.sleep(6)
+    click(319, 83)
+    time.sleep(6)
+    click(319, 87)
+    time.sleep(6)
+    click(532, 83)
+    time.sleep(6)
+    click(138, 70)
+    time.sleep(6)
+    click(325, 274)
     time.sleep(6)
 
     etat="recherche_pnj"
@@ -766,34 +800,41 @@ def retour_peche():
     send_telegram("🎣 Le bot retourne à la pêche.")
 
     time.sleep(1)
-    click(218, 409)
+    click(162, 328)
     time.sleep(6)
-    click(32, 290)
+    click(562, 473)
     time.sleep(6)
-    click(509, 269)
-    click(565, 303)
-    time.sleep(3)
-    click(30, 449)
+    click(400, 473)
     time.sleep(6)
-    click(30, 368)
+    click(348, 476)
     time.sleep(6)
-    click(512, 474)
+    click(348, 476)
     time.sleep(6)
-    click(639, 463)
+    click(302, 474)
+    time.sleep(6)
+    click(346, 476)
+    time.sleep(6)
+    click(723, 315)
+    time.sleep(6)
+    click(722, 423)
     time.sleep(6)
     click(722, 476)
     time.sleep(6)
-    click(723, 421)
+    click(722, 366)
     time.sleep(6)
-    click(721, 312)
-    time.sleep(6)
-    click(721, 289)
-    time.sleep(6)
-    click(720, 398)
+    click(722, 232)
     time.sleep(6)
     click(723, 423)
     time.sleep(6)
-    click(346, 475)
+    click(717, 288)
+    time.sleep(6)
+    click(720, 423)
+    time.sleep(6)
+    click(721, 314)
+    time.sleep(6)
+    click(721, 314)
+    time.sleep(6)
+    click(721, 314)
     time.sleep(2)
 
     maps = 1
