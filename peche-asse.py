@@ -425,7 +425,7 @@ resources_positions = {
 def change_map():
     global maps
 
-    time.sleep(4)
+    time.sleep(10)
 
     x, y = mapsposition[maps-1]
 
@@ -451,7 +451,7 @@ def do_collect():
 
     positions = resources_positions[maps][:]
     # random.shuffle(positions)  # mélange aléatoire
-
+    time.sleep(0.5)
     #verif surpoid
     pixel_color = get_pixel(391, 519)
     if pixel_color == (255, 102, 0):
@@ -585,55 +585,63 @@ def en_combat():
             passe_tour()
             return
 
-        #selection attack
-        click(620, 556)
-        time.sleep(1)
+        attackposx, attackposy = 650, 555
+        nombre_coup = 3
 
-        box = (656, 463, 80, 55)
-        # Couleur cible : bleu pur
-        target_color = (0, 0, 255)
-        found = search_and_click(box, target_color)
-        if found:
-            print("✅ Action effectuée.")
-
-        #verif distance
-        pixel_color = get_pixel(599, 334)
-        time.sleep(0.3)
-        if pixel_color == (201,191,157):
-            click(722, 273)
-            #approche
-            #trouve enemie
-            box = (656, 463, 80, 55)
-            # Couleur cible : bleu pur
-
-            click(744, 468)
-            target_color = (0, 0, 255)
-            found = search(box, target_color)
-            box = (7, 58, 730, 400)
-            target_color = (0, 0, 255)
-            Tposx, Tposy = search(box, target_color)
-
-
-            #move_pathfind(positionstartx, positionstarty)
-
-
-            move_towards((positionstartx, positionstarty), (Tposx, Tposy))
-            click(744, 468)
-            time.sleep(1)
+        for i in range(1, nombre_coup+1):
             #selection attack
-            click(620, 556)
-            time.sleep(0.4)
+            click(attackposx, attackposy)
+            time.sleep(1)
+
             box = (656, 463, 80, 55)
             # Couleur cible : bleu pur
             target_color = (0, 0, 255)
             found = search_and_click(box, target_color)
+            if found:
+                print("✅ Action effectuée.")
+            else:
+                box = (20, 75, 740-20, 475-75)
+                search_and_click(box, target_color)
 
-            #reverif dist
-            pixel_color = get_pixel(599, 334)
-            if pixel_color == (201,191,157):
-                click(722, 273)
+            if i==1:
+                #verif distance
+                pixel_color = get_pixel(599, 334)
+                time.sleep(0.3)
+                if pixel_color == (201,191,157):
+                    click(722, 273)
+                    #approche
+                    #trouve enemie
+                    box = (656, 463, 80, 55)
+                    # Couleur cible : bleu pur
 
-            time.sleep(0.5)
+                    click(744, 468)
+                    target_color = (0, 0, 255)
+                    found = search(box, target_color)
+                    box = (7, 58, 730, 400)
+                    target_color = (0, 0, 255)
+                    Tposx, Tposy = search(box, target_color)
+
+
+                    #move_pathfind(positionstartx, positionstarty)
+
+
+                    move_towards((positionstartx, positionstarty), (Tposx, Tposy))
+                    click(744, 468)
+                    time.sleep(1)
+                    #selection attack
+                    click(attackposx, attackposy)
+                    time.sleep(0.4)
+                    box = (656, 463, 80, 55)
+                    # Couleur cible : bleu pur
+                    target_color = (0, 0, 255)
+                    found = search_and_click(box, target_color)
+
+                    #reverif dist
+                    pixel_color = get_pixel(599, 334)
+                    if pixel_color == (201,191,157):
+                        click(722, 273)
+
+                    time.sleep(0.5)
 
 
 
@@ -783,7 +791,7 @@ def recherche_pnj():
         570, 234,
         check_x=570, check_y=234,
         target_color=(190, 185, 152),
-        delay=0.5
+        delay=1.2
     )
 
     time.sleep(0.5)
@@ -834,8 +842,6 @@ def retour_peche():
     time.sleep(6)
     click(721, 314)
     time.sleep(6)
-    click(721, 314)
-    time.sleep(2)
 
     maps = 1
 
