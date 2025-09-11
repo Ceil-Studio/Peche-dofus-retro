@@ -478,7 +478,7 @@ def do_collect():
         if pixel_color == (213, 207, 170):
             print(f"🎯 Couleur détectée à {offset_x},{offset_y} | clic effectué")
             click(offset_x, offset_y)
-            time.sleep(20)
+            time.sleep(16)
 
         else:
             print(f"❌ Couleur non détectée à {offset_x},{offset_y} | retour à la ressource précédente, {pixel_color}")
@@ -617,7 +617,7 @@ def en_combat():
                     click(744, 468)
                     target_color = (0, 0, 255)
                     found = search(box, target_color)
-                    box = (7, 58, 745-7, 485-58)
+                    box = (7, 58, 730, 400)
                     target_color = (0, 0, 255)
                     Tposx, Tposy = search(box, target_color)
 
