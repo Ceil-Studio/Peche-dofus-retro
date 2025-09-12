@@ -22,7 +22,7 @@ dsp = display.Display()
 root = dsp.screen().root
 
 # Etat initial
-etat = "collect"
+etat = "recherche_pnj"
 maps = 1
 first_tour = True
 
@@ -801,7 +801,6 @@ def recherche_pnj():
     time.sleep(0.5)
     click(722, 152)
 
-    etat = "retour_peche"
 
 
 
