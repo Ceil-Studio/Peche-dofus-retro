@@ -469,19 +469,38 @@ def do_collect():
         return
 
     for pos in positions:
-        x, y = pos
+        x, y = pos        
+
+        #verif combat
+        pixel_color = get_pixel(720, 460)
+
+        if pixel_color == (255, 102, 0):
+            etat="start_combat"
+            return
+
         # Clique sur la ressource
+        os.system("xdotool keydown e") 
         click(x, y)
         offset_x = x+50
         offset_y = y+21
         time.sleep(0.3)  # petit délai pour que l'action soit visible
+        os.system("xdotool keyup e")
         
         pixel_color = get_pixel(offset_x, offset_y)
 
         if pixel_color == (213, 207, 170):
             print(f"🎯 Couleur détectée à {offset_x},{offset_y} | clic effectué")
             click(offset_x, offset_y)
-            time.sleep(20)
+            
+            for i in range(1, 20):
+                #verif combat
+                pixel_color = get_pixel(720, 460)
+
+                if pixel_color == (255, 102, 0):
+                    etat="start_combat"
+                    return
+
+                time.sleep(1)
 
         else:
             print(f"❌ Couleur non détectée à {offset_x},{offset_y} | retour à la ressource précédente, {pixel_color}")
@@ -671,15 +690,6 @@ def en_combat():
 
 
     time.sleep(0.8)
-    #verif fin
-    box = (570, 380, 10, 90)
-    target_color = (255, 97, 0)
-    found = search_and_click(box, target_color)
-    if found:
-        print("✅ Action effectuée.")
-        etat = "fin_de_combat"
-        return
-    time.sleep(0.3)
 
 
 
@@ -717,8 +727,10 @@ def retour_banque():
     global etat
     global maps
     timemap = 6
+    
+    nb_map = len(mapsposition)
 
-    nb_clicks = (11 - maps) % 10
+    nb_clicks = ((nb_map+1) - maps) % nb_map
 
     if nb_clicks>0:
         for i in range(nb_clicks):
@@ -773,35 +785,38 @@ def recherche_pnj():
     box = (401, 167, 260, 200)
     target_color = (182, 147, 31)
     found = search_and_click(box, target_color)
+    print(found)
     time.sleep(0.3)
-    pointer = root.query_pointer()
-    x, y = pointer.root_x, pointer.root_y
-    os.system(f"xdotool mousemove {x+20} {y+20} click 1")
-    time.sleep(0.8)
-    click(137, 303)
-    time.sleep(2)
-    click(609, 178)
+    if found:
+        pointer = root.query_pointer()
+        x, y = pointer.root_x, pointer.root_y
+        os.system(f"xdotool mousemove {x+20} {y+20} click 1")
+        time.sleep(0.8)
+        click(137, 303)
+        time.sleep(2)
+        click(609, 178)
 
 
-    time.sleep(2)
+        time.sleep(2)
 
-    box = (543, 132, 738, 483)  # x, y, w, h
-    filename = capture_region_bmp(box)
-    print("✅ Capture BMP enregistrée :", filename)
-    resp = send_photo_telegram(filename, "📸 Capture brute avec Xlib")
-    print("📨 Réponse Telegram :", resp)
-    
-    ctrl_double_click_until_color(
-        570, 234,
-        check_x=570, check_y=234,
-        target_color=(190, 185, 152),
-        delay=1.2
-    )
+        box = (543, 132, 738, 483)  # x, y, w, h
+        filename = capture_region_bmp(box)
+        print("✅ Capture BMP enregistrée :", filename)
+        resp = send_photo_telegram(filename, "📸 Capture brute avec Xlib")
+        print("📨 Réponse Telegram :", resp)
+        
+        ctrl_double_click_until_color(
+            570, 234,
+            check_x=570, check_y=234,
+            target_color=(190, 185, 152),
+            delay=1.2
+        )
 
-    time.sleep(0.5)
-    click(722, 152)
+        time.sleep(0.5)
+        click(722, 152)
 
-    etat = "retour_peche"
+        etat = "retour_peche"
+        return
 
 
 
