@@ -455,11 +455,7 @@ def do_collect():
     positions = resources_positions[maps][:]
     # random.shuffle(positions)  # mélange aléatoire
     time.sleep(0.5)
-    #verif surpoid
-    pixel_color = get_pixel(391, 519)
-    if pixel_color == (255, 102, 0):
-        etat="retour_banque"
-        return
+
 
     #verif combat 
     pixel_color = get_pixel(720, 460)
@@ -468,6 +464,12 @@ def do_collect():
         etat="start_combat"
         return
 
+    #verif surpoid
+    pixel_color = get_pixel(391, 519)
+    if pixel_color == (255, 102, 0):
+        etat="retour_banque"
+        return
+    
     for pos in positions:
         x, y = pos        
 
@@ -726,7 +728,7 @@ def lvl_up():
 def retour_banque():
     global etat
     global maps
-    timemap = 6
+    timemap = 11
     
     nb_map = len(mapsposition)
 
