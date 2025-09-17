@@ -1,0 +1,5 @@
+# Ignorer tout le contenu du dossier telegram/
+telegram/*
+
+# Mais garder le dossier lui-même
+!telegram/.gitkeep
