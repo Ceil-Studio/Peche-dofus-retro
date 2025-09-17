@@ -490,7 +490,7 @@ def do_collect():
         # Clique sur la ressource
         os.system("xdotool keydown e") 
         click(x, y)
-        offset_x = x+50
+        offset_x = x+20
         offset_y = y+21
         time.sleep(0.3)  # petit délai pour que l'action soit visible
         os.system("xdotool keyup e")
