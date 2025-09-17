@@ -674,6 +674,14 @@ def en_combat():
                         click(722, 273)
 
                     time.sleep(0.5)
+            else:
+                #verif distance
+                pixel_color = get_pixel(599, 334)
+                time.sleep(0.3)
+                if pixel_color == (201,191,157):
+                    click(722, 273)
+                    passe_tour()
+                    return
 
 
 
