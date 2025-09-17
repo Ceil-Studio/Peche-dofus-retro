@@ -7,8 +7,16 @@ import requests
 import math
 import struct
 
-TOKEN = "7343462874:AAFxCdI5-8YKEdW11la4OIWnBt45ogB02hI"
-CHAT_ID = "2118541386"
+
+folder = "./telegram"
+
+# récupère le premier fichier du dossier
+filename = os.listdir(folder)[0]
+CHAT_ID = os.path.splitext(filename)[0]
+filepath = os.path.join(folder, filename)
+with open(filepath, "r") as f:
+    TOKEN = f.read().strip()
+
 URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
 def send_telegram(msg):
