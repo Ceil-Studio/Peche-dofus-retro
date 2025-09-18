@@ -575,6 +575,17 @@ def en_combat():
     global first_tour
     print("Combat en cours...")
 
+    #verif fin
+    box = (570, 380, 10, 90)
+    target_color = (255, 97, 0)
+    found = search_and_click(box, target_color)
+    if found:
+        print("✅ Action effectuée.")
+        etat = "fin_de_combat"
+        return
+
+
+
     #verif tour
     pixel_color = get_pixel(441, 515)
     time.sleep(0.3)
