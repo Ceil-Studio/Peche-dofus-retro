@@ -8,7 +8,7 @@ import math
 import struct
 
 folder = "./telegram"
-
+print("DEBUG: contenu du dossier :", os.listdir(folder))
 # récupère le premier fichier du dossier
 filename = os.listdir(folder)[0]
 CHAT_ID = os.path.splitext(filename)[0]
@@ -21,6 +21,7 @@ URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 def send_telegram(msg):
     requests.post(URL, data={"chat_id": CHAT_ID, "text": msg})
 
+print(f"token : {TOKEN} CHAT : {CHAT_ID}")
 
 send_telegram("🚀 Bot lancé sur le VPS !")
 
@@ -701,16 +702,17 @@ def en_combat():
         time.sleep(2)
         passe_tour()
 
-
-
-
-
-
-
     time.sleep(0.8)
 
 
-
+    #verif fin
+    box = (570, 380, 10, 90)
+    target_color = (255, 97, 0)
+    found = search_and_click(box, target_color)
+    if found:
+        print("✅ Action effectuée.")
+        etat = "fin_de_combat"
+        return
 
 
 
