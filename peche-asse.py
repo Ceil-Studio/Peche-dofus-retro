@@ -435,7 +435,8 @@ resources_positions = {
 
 def change_map():
     global maps
-
+    
+    nb_map = len(mapsposition)
     time.sleep(10)
 
     x, y = mapsposition[maps-1]
@@ -445,7 +446,7 @@ def change_map():
 
     maps = maps+1
 
-    if maps>10:
+    if maps>nb_map:
         maps = 1
 
     time.sleep(10)
