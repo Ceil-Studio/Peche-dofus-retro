@@ -31,7 +31,7 @@ dsp = display.Display()
 root = dsp.screen().root
 
 # Etat initial
-etat = "recherche_pnj"
+etat = "collect"
 maps = 1
 first_tour = True
 
