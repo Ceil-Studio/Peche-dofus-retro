@@ -6,7 +6,7 @@ import random
 import requests
 import math
 import struct
-from custom_fonction import capture_region_bmp, send_photo_telegram, search_color, ctrl_double_click_until_color, get_mouse_pixel, get_pixel, search_and_click, search, mousemove, click, click_notransition, move_towards, is_clickable, click_and_update, change_map
+from custom_fonction import capture_region_bmp, send_photo_telegram, search_color, ctrl_double_click_until_color, get_mouse_pixel, get_pixel, search_and_click, search, mousemove, click, click_notransition, move_towards, is_clickable, click_and_update
 
 folder = "./telegram"
 print("DEBUG: contenu du dossier :", os.listdir(folder))
