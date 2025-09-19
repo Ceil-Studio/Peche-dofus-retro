@@ -94,6 +94,26 @@ resources_positions = {
 
 
 
+def change_map():
+    global maps
+
+    nb_map = len(mapsposition)
+    time.sleep(10)
+
+    x, y = mapsposition[maps-1]
+
+    click(x, y)
+
+
+    maps = maps+1
+
+    if maps>nb_map:
+        maps = 1
+
+    time.sleep(10)
+
+
+
 
 
 
