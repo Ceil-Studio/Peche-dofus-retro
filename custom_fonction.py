@@ -6,6 +6,7 @@ import random
 import requests
 import math
 import struct
+import variable
 
 folder = "./telegram"
 print("DEBUG: contenu du dossier :", os.listdir(folder))
@@ -23,6 +24,10 @@ URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 # Initialisation X11
 dsp = display.Display()
 root = dsp.screen().root
+
+def send_telegram(msg):
+    requests.post(URL, data={"chat_id": CHAT_ID, "text": msg})
+
 
 
 def capture_region_bmp(box, filename="capture.bmp"):
@@ -314,10 +319,265 @@ def is_clickable(x, y):
 
 def click_and_update(x, y):
     """Clique sur la case et met à jour la position globale"""
-    global positionstartx, positionstarty
     click(x, y)
-    positionstartx, positionstarty = x, y
+    variable.positionstartx, variable.positionstarty = x, y
     time.sleep(0.3)
     return True
+
+
+def start_combat():
+    print("Démarrage du combat...")
+
+    #verif mode tactic
+
+    pixel_color = get_pixel(651, 431)
+    if pixel_color != (0,153, 0):
+        click(651, 435)
+
+    #verouille combat
+    pixel_color = get_pixel(673, 437)
+    if pixel_color != (0,153,0):
+        click(673, 437)
+
+    #position depart
+    box = (7, 58, 730, 400)
+    target_color = (255, 0, 0)
+    variable.positionstartx, variable.positionstarty = search(box, target_color)
+    pixel_color = get_pixel(634, 314)
+    time.sleep(0.3)
+    click(variable.positionstartx, variable.positionstarty)
+
+    time.sleep(0.5)
+
+    click(720, 460)
+    time.sleep(0.3)
+    os.system("xdotool mousemove 342 262")
+    time.sleep(1)
+    variable.etat = "en_combat"
+    variable.first_tour = True
+    send_telegram("⚔️ Début combat !")
+    return
+
+def passe_tour():
+    os.system("xdotool key F1")
+    time.sleep(1)
+
+def en_combat():
+    print("Combat en cours...")
+
+    #verif fin
+    box = (570, 380, 10, 90)
+    target_color = (255, 97, 0)
+    found = search_and_click(box, target_color)
+    if found:
+        print("✅ Action effectuée.")
+        variable.etat = "fin_de_combat"
+        return
+
+
+
+    #verif tour
+    pixel_color = get_pixel(441, 515)
+    time.sleep(0.3)
+
+    if pixel_color == (255,102,0):
+        #tour en cours
+
+        if variable.first_tour:
+            variable.first_tour = False
+
+            #mode tactic
+            pixel_color = get_pixel(693, 438)
+            if pixel_color != (0,153, 0):
+                click(693, 438)
+
+            #select coffre
+            click(559, 587)
+
+            time.sleep(0.5)
+
+            size = 200
+            box = (variable.positionstartx-size/2, variable.positionstarty-size/2, size, size)
+            target_color = (47, 109, 171)
+            found = search_and_click(box, target_color)
+            #spawn Coffre Couleur: (47, 109, 171)
+
+            time.sleep(0.3)
+
+            #select sac
+            click(537, 585)
+            size = 200
+            box = (variable.positionstartx-size/2, variable.positionstarty-size/2, size, size)
+            target_color = (51, 113, 174)
+            found = search_and_click(box, target_color)
+            target_color = (47, 109, 171)
+            found = search_and_click(box, target_color)
+            #spawn sac Couleur: (47, 109, 171)
+
+
+            time.sleep(2)
+            passe_tour()
+            return
+
+        attackposx, attackposy = 650, 555
+        nombre_coup = 3
+
+        for i in range(1, nombre_coup+1):
+            #selection attack
+            click(attackposx, attackposy)
+            time.sleep(1)
+
+            box = (656, 463, 80, 55)
+            # Couleur cible : bleu pur
+            target_color = (0, 0, 255)
+            found = search_and_click(box, target_color)
+            if found:
+                print("✅ Action effectuée.")
+            else:
+                box = (20, 75, 740-20, 475-75)
+                search_and_click(box, target_color)
+
+            if i==1:
+                #verif distance
+                pixel_color = get_pixel(599, 334)
+                time.sleep(0.3)
+                if pixel_color == (201,191,157):
+                    click(722, 273)
+                    #approche
+                    #trouve enemie
+                    box = (656, 463, 80, 55)
+                    # Couleur cible : bleu pur
+
+                    click(744, 468)
+                    target_color = (0, 0, 255)
+                    found = search(box, target_color)
+                    box = (7, 58, 745-7, 485-58)
+                    target_color = (0, 0, 255)
+                    Tposx, Tposy = search(box, target_color)
+
+                    move_towards((variable.positionstartx, variable.positionstarty), (Tposx, Tposy))
+                    click(744, 468)
+                    time.sleep(1)
+                    #selection attack
+                    click(attackposx, attackposy)
+                    time.sleep(0.4)
+                    box = (656, 463, 80, 55)
+                    # Couleur cible : bleu pur
+                    target_color = (0, 0, 255)
+                    found = search_and_click(box, target_color)
+
+                    #reverif dist
+                    pixel_color = get_pixel(599, 334)
+                    if pixel_color == (201,191,157):
+                        click(722, 273)
+
+                    time.sleep(0.5)
+            else:
+                #verif distance
+                pixel_color = get_pixel(599, 334)
+                time.sleep(0.3)
+                if pixel_color == (201,191,157):
+                    click(722, 273)
+                    passe_tour()
+                    return
+
+
+
+
+        time.sleep(1.5)
+
+        #verif fin
+        box = (570, 380, 10, 90)
+        target_color = (255, 97, 0)
+        found = search_and_click(box, target_color)
+        if found:
+            print("✅ Action effectuée.")
+            variable.etat = "fin_de_combat"
+            return
+        os.system("xdotool mousemove 342 262")
+
+        time.sleep(2)
+        passe_tour()
+
+    time.sleep(0.8)
+
+
+    #verif fin
+    box = (570, 380, 10, 90)
+    target_color = (255, 97, 0)
+    found = search_and_click(box, target_color)
+    if found:
+        print("✅ Action effectuée.")
+        variable.etat = "fin_de_combat"
+        return
+
+
+
+def fin_de_combat():
+    print("Fin du combat...")
+    send_telegram("⚔️ fin du combat !")
+    click(554, 509)
+    time.sleep(0.8)
+    click(645, 145)
+    time.sleep(0.7)
+    os.system("xdotool mousemove 600 224 click --repeat 2 --delay 100 1")
+    time.sleep(0.8)
+    click(722, 91)
+
+
+
+    variable.etat = "collect"
+
+
+def lvl_up():
+    print("Level up détecté !")
+    
+    send_telegram("lvl_up !")
+
+    click(400, 298)
+
+    variable.etat = "collect"
+
+
+def recherche_pnj():
+
+    print("Recherche du pnj...")
+    #search pnj
+    box = (401, 167, 260, 200)
+    target_color = (182, 147, 31)
+    found = search_and_click(box, target_color)
+    print(found)
+    time.sleep(0.3)
+    if found:
+        pointer = root.query_pointer()
+        x, y = pointer.root_x, pointer.root_y
+        os.system(f"xdotool mousemove {x+20} {y+20} click 1")
+        time.sleep(0.8)
+        click(137, 303)
+        time.sleep(2)
+        click(609, 178)
+
+
+        time.sleep(2)
+
+        box = (543, 132, 738, 483)  # x, y, w, h
+        filename = capture_region_bmp(box)
+        print("✅ Capture BMP enregistrée :", filename)
+        resp = send_photo_telegram(filename, "📸 Capture brute avec Xlib")
+        print("📨 Réponse Telegram :", resp)
+        
+        ctrl_double_click_until_color(
+            570, 234,
+            check_x=570, check_y=234,
+            target_color=(190, 185, 152),
+            delay=1.2
+        )
+
+        time.sleep(0.5)
+        click(722, 152)
+
+        variable.etat = "retour_peche"
+        return
+
 
 
