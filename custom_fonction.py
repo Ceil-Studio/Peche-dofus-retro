@@ -154,6 +154,41 @@ def get_pixel(x, y):
     b, g, r, _ = raw.data
     return (r, g, b)
 
+
+def search_and_click_blueish(box, blue_threshold=150):
+    """
+    Scanne une boîte rectangulaire et clique sur le premier pixel
+    qui est considéré comme "bleuté".
+
+    box = (x1, y1, width, height)
+    blue_threshold = valeur minimale de bleu pour considérer un pixel comme bleu
+    """
+    x1, y1, w, h = box
+    x1 = int(max(0, x1))
+    y1 = int(max(0, y1))
+
+    raw = root.get_image(x1, y1, w, h, X.ZPixmap, 0xffffffff)
+    data = raw.data
+    stride = w * 4  # chaque pixel = 4 octets
+
+    for row in range(h):
+        for col in range(w):
+            i = row * stride + col * 4
+            b, g, r, _ = data[i:i+4]
+
+            # Détection du bleu dominant
+            if b > blue_threshold and b > r and b > g:
+                px = x1 + col
+                py = y1 + row
+                print(f"🎯 Pixel bleuté trouvé à ({px}, {py}), clic !")
+                time.sleep(0.5)
+                click_notransition(px, py)
+                return True
+
+    print("❌ Aucun pixel bleuté trouvé dans la zone.")
+    return False
+
+
 def search_and_click(box, target_color):
     """
     Scanne une boîte rectangulaire et clique sur le premier pixel trouvé
