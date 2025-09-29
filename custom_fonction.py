@@ -553,7 +553,7 @@ def fin_de_combat():
     send_telegram("⚔️ fin du combat !")
     click(554, 509)
     time.sleep(0.8)
-    click(645, 145)
+    click(630, 145)
     time.sleep(0.7)
     os.system("xdotool mousemove 600 224 click --repeat 2 --delay 100 1")
     time.sleep(0.8)
