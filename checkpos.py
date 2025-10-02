@@ -12,6 +12,9 @@ def get_mouse_position():
 def on_click(x, y, button, pressed):
     if pressed:  # uniquement au moment du clic
         coords = f"({x}, {y}),\n"
+        if button != mouse.Button.left:
+            return
+
         print(f"\n🖱 Clic {button} à {coords.strip()}")
 
         # Sauvegarde dans click.txt
